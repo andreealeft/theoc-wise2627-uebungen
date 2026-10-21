@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheoC Übungen</title><style>:root{
+  --bg:#f7f6f2; --paper:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#d9dce3;
+  --accent:#1f5fa8; --accent-soft:#e7effa; --goal:#2f6f4f; --goal-soft:#e8f3ec;
+  --warm:#b4561f; --warm-soft:#fbefe6; --c1:#1f5fa8; --c2:#c2410c; --c3:#2f6f4f;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; } }
+:root[data-theme="dark"]{
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,"Times New Roman",serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+.kicker{font:600 13px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;line-height:1.15;margin:6px 0 8px}
+h2{font-size:24px;margin:0 0 6px}
+h3{font:600 15px/1.4 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:22px 0 8px}
+.meta{font:15px/1.5 system-ui,sans-serif;color:var(--muted)}
+.meta b{color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px 22px 18px;margin:22px 0}
+.chip{display:inline-block;font:600 13px/1 system-ui,sans-serif;padding:6px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);vertical-align:middle;margin-left:8px}
+.goal{background:var(--goal-soft);border-left:4px solid var(--goal);padding:10px 14px;border-radius:6px;margin:12px 0}
+.goal .lbl,.train .lbl,.later .lbl{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:2px}
+.goal .lbl{color:var(--goal)}
+.train{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 14px;border-radius:6px;margin:12px 0}
+.train .lbl{color:var(--accent)}
+.later{background:var(--warm-soft);border-left:4px solid var(--warm);padding:10px 14px;border-radius:6px;margin:12px 0}
+.later .lbl{color:var(--warm)}
+ol.parts{padding-left:0;list-style:none;counter-reset:p}
+ol.parts>li{counter-increment:p;position:relative;padding-left:36px;margin:12px 0}
+ol.parts>li::before{content:"(" counter(p,lower-alpha) ")";position:absolute;left:0;font-weight:700}
+.pts{font:600 13px/1 system-ui,sans-serif;color:var(--muted);white-space:nowrap}
+figure{margin:18px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px}
+figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;font:14px/1.4 system-ui,sans-serif;margin-top:10px}
+.controls input[type=range]{width:220px;max-width:100%}
+button{font:600 14px/1 system-ui,sans-serif;padding:9px 14px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+.viz{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:center}
+@media (max-width:640px){.viz{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:system-ui,sans-serif}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:14px 0;font:15px/1.55 system-ui,sans-serif}
+summary{cursor:pointer;font-weight:600}
+.road{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:10px 0 4px}
+.road div{font:11px/1.25 system-ui,sans-serif;text-align:center;padding:8px 2px;border-radius:5px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.road div b{display:block;font-size:13px;color:var(--ink)}
+.road div.now{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.road div.now b{color:var(--paper)}
+@media (max-width:640px){.road{grid-template-columns:repeat(6,1fr)}}
+.num{font:600 14px/1.4 ui-monospace,Menlo,monospace}
+footer{font:13px/1.5 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);margin-top:36px;padding-top:12px}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  .controls,button,.noprint{display:none!important}
+  .card{border:none;padding:0;margin:14px 0;break-inside:avoid-page}
+  details{border:none;padding:0} details:not([open]) > *:not(summary){display:block}
+  figure{break-inside:avoid}
+}
+
+.week{display:grid;grid-template-columns:110px 1fr;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.wk b{display:block;font:700 18px/1.2 system-ui,sans-serif}
+.cells{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.sheet .tag{font:700 12px/1 system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.sheet.präsenzübung .tag{color:var(--c3)} .sheet.hausübung .tag{color:var(--accent)}
+.sheet .when{display:block;font:13px/1.4 system-ui,sans-serif;color:var(--muted);margin:4px 0 6px}
+.sheet .links{display:block;margin-top:8px;font:600 13px/1.4 system-ui,sans-serif} .sheet .links a{color:var(--accent)}
+section a{color:var(--accent)}
+@media (max-width:700px){.week{grid-template-columns:1fr}.cells{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<header class="top"><div class="kicker">Theoretische Physik C · WiSe 2026/27</div><h1>Übungen</h1>
+<div class="meta">Prof. Dr. Tobias Osborne · Dr. Andreea-Iulia Lefterovici</div></header>
+<section><p>Jede Hausübung wird donnerstags ausgegeben und ist eine Woche später, donnerstags um 12:00 Uhr, abzugeben (einzeln, als PDF im Abgabeordner auf Stud.IP). Die Präsenzübung derselben Woche findet dienstags und donnerstags statt; ihr Blatt öffnest du mit dem Passwort, das du in der Übung bekommst.</p>
+<p>Skript und Vorlesungsvideos: <a href="https://tobiasosborne.github.io/theoretical-physics-C/">tobiasosborne.github.io/theoretical-physics-C</a></p></section>
+<section class="week"><div class="wk"><b>Woche 1</b></div><div class="cells">
+<div class="sheet hausübung"><span class="tag">Hausübung 1</span><span class="when">Ausgabe Do 22.10.2026 · <b>Abgabe Do 29.10.2026, 12:00 Uhr</b></span>
+<span class="links"><a href="HU01.html">Interaktive Seite</a> · <a href="HU01.pdf">PDF-Blatt</a></span></div>
+<div class="sheet präsenzübung"><span class="tag">Präsenzübung 1 🔒</span><span class="when">Di 27.10.2026 · Do 29.10.2026</span>
+<span class="links"><a href="PU01.html">Blatt öffnen (Passwort aus der Übung)</a></span></div></div></section>
+</div></body></html>
