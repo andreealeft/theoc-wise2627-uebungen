@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheoC Hausübung 2</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f7f6f2; --paper:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#d9dce3;
+  --accent:#1f5fa8; --accent-soft:#e7effa; --goal:#2f6f4f; --goal-soft:#e8f3ec;
+  --warm:#b4561f; --warm-soft:#fbefe6; --c1:#1f5fa8; --c2:#c2410c; --c3:#2f6f4f;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; } }
+:root[data-theme="dark"]{
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,"Times New Roman",serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+.kicker{font:600 13px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;line-height:1.15;margin:6px 0 8px}
+h2{font-size:24px;margin:0 0 6px}
+h3{font:600 15px/1.4 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:22px 0 8px}
+.meta{font:15px/1.5 system-ui,sans-serif;color:var(--muted)}
+.meta b{color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px 22px 18px;margin:22px 0}
+.chip{display:inline-block;font:600 13px/1 system-ui,sans-serif;padding:6px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);vertical-align:middle;margin-left:8px}
+.goal{background:var(--goal-soft);border-left:4px solid var(--goal);padding:10px 14px;border-radius:6px;margin:12px 0}
+.goal .lbl,.train .lbl,.later .lbl{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:2px}
+.goal .lbl{color:var(--goal)}
+.train{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 14px;border-radius:6px;margin:12px 0}
+.train .lbl{color:var(--accent)}
+.later{background:var(--warm-soft);border-left:4px solid var(--warm);padding:10px 14px;border-radius:6px;margin:12px 0}
+.later .lbl{color:var(--warm)}
+ol.parts{padding-left:0;list-style:none;counter-reset:p}
+ol.parts>li{counter-increment:p;position:relative;padding-left:36px;margin:12px 0}
+ol.parts>li::before{content:"(" counter(p,lower-alpha) ")";position:absolute;left:0;font-weight:700}
+.pts{font:600 13px/1 system-ui,sans-serif;color:var(--muted);white-space:nowrap}
+figure{margin:18px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px}
+figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;font:14px/1.4 system-ui,sans-serif;margin-top:10px}
+.controls input[type=range]{width:220px;max-width:100%}
+button{font:600 14px/1 system-ui,sans-serif;padding:9px 14px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+.viz{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:center}
+@media (max-width:640px){.viz{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:system-ui,sans-serif}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:14px 0;font:15px/1.55 system-ui,sans-serif}
+summary{cursor:pointer;font-weight:600}
+.road{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:10px 0 4px}
+.road div{font:11px/1.25 system-ui,sans-serif;text-align:center;padding:8px 2px;border-radius:5px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.road div b{display:block;font-size:13px;color:var(--ink)}
+.road div.now{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.road div.now b{color:var(--paper)}
+@media (max-width:640px){.road{grid-template-columns:repeat(6,1fr)}}
+.num{font:600 14px/1.4 ui-monospace,Menlo,monospace}
+footer{font:13px/1.5 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);margin-top:36px;padding-top:12px}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  .controls,button,.noprint{display:none!important}
+  .card{border:none;padding:0;margin:14px 0;break-inside:avoid-page}
+  details{border:none;padding:0} details:not([open]) > *:not(summary){display:block}
+  figure{break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Theoretische Physik C · WiSe 2026/27</div>
+  <h1>Hausübung 2</h1>
+  <div class="meta"><b>Ausgabe: So 01.11.2026 · Abgabe: So 08.11.2026, 18:00 Uhr</b> · 10 Punkte · 2 Aufgaben<br>
+  Prof. Dr. Tobias Osborne · Dr. Andreea-Iulia Lefterovici</div>
+</header>
+
+<section>
+  <h3>Worum es diese Woche geht</h3>
+  <p>In der Quantenmechanik sagen wir nicht voraus, <em>was</em> passiert, sondern mit welcher <em>Wahrscheinlichkeit</em> etwas passiert. Diese Wahrscheinlichkeiten entstehen auf eine merkwürdige Weise: Man rechnet zuerst mit komplexen Zahlen, den <em>Amplituden</em>, addiert sie, und quadriert erst ganz am Ende. Genau dieser Umweg erzeugt Interferenz, und Interferenz ist das, was Quantenphysik von klassischer Physik unterscheidet.</p>
+  <p>Diese Woche übst du die beiden Werkzeuge, die du dafür brauchst: Rechnen mit komplexen Zahlen (Aufgabe 1) und Rechnen mit Vektoren in $\mathbb{C}^2$ (Aufgabe 2). Am Ende siehst du, dass beide Aufgaben dasselbe Experiment beschreiben.</p>
+  <div class="road" aria-label="Themen des Semesters">
+    <div><b>1</b>Wahrschein&shy;lichkeit</div>
+    <div class="now"><b>2</b>Amplituden &amp; $\mathbb{C}^2$</div>
+    <div><b>3</b>Operatoren</div>
+    <div><b>4</b>Spur &amp; Diagona&shy;lisierung</div>
+    <div><b>5</b>Messung &amp; Zeit</div>
+    <div><b>6</b>Fourier</div>
+    <div><b>7</b>Wellen&shy;pakete</div>
+    <div><b>8</b>Kasten</div>
+    <div><b>9</b>Oszillator</div>
+    <div><b>10</b>Drehimpuls &amp; Spin</div>
+    <div><b>11</b>Wasserstoff</div>
+    <div><b>12</b>Identische Teilchen &amp; Entropie</div>
+  </div>
+  <div class="meta">Hausübungen des Semesters. Du bist bei Nummer 2.</div>
+</section>
+
+
+<!-- =========================== Aufgabe 1 ============================ -->
+<article class="card">
+  <h2>Aufgabe 1: Interferenz im Mach-Zehnder-Interferometer <span class="chip">5 Punkte</span></h2>
+
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Mit komplexen Zahlen in Polarform sicher rechnen. Sehen, dass in der Quantenmechanik <em>Amplituden</em> addiert werden und erst danach das Betragsquadrat genommen wird, und dass genau das Interferenz erzeugt.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  Die Rechenregeln $|z|^2 = z\bar z$ und $e^{i\varphi}e^{-i\varphi}=1$ wirst du in diesem Semester hunderte Male brauchen, bei jeder Wahrscheinlichkeit, jedem Erwartungswert, jeder Zeitentwicklung. Wenn sie jetzt sitzen, sparst du später viel Zeit.</div>
+
+  <p>Ein einzelnes Photon trifft auf einen Strahlteiler und kann danach zwei Wege nehmen. In einem Weg sitzt ein Phasenschieber, der eine Phase $\varphi$ erzeugt. Ein zweiter Strahlteiler führt beide Wege wieder zusammen; dahinter stehen zwei Detektoren $D_1$ und $D_2$. Für jeden Detektor addiert man die Amplituden der beiden Wege:</p>
+  $$a_1=\tfrac12+\tfrac12\,e^{i\varphi}\quad(\text{zu }D_1),\qquad a_2=\tfrac12-\tfrac12\,e^{i\varphi}\quad(\text{zu }D_2).$$
+  <p>Die Wahrscheinlichkeit, dass Detektor $D_j$ klickt, ist $P_j=|a_j|^2$.</p>
+
+  <figure>
+    <div class="viz">
+      <svg id="mz" viewBox="0 0 420 270" role="img" aria-label="Mach-Zehnder-Interferometer">
+        <defs>
+          <radialGradient id="glow"><stop offset="0" stop-color="#ffd54a"/><stop offset="1" stop-color="#ffd54a" stop-opacity="0"/></radialGradient>
+          <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        </defs>
+        <g stroke="var(--c1)" stroke-width="3" fill="none" opacity=".85">
+          <path d="M20 210 H90"/>
+          <path d="M90 210 H300 V70"/>
+          <path d="M90 210 V70 H300"/>
+          <path d="M300 70 H370"/>
+          <path d="M300 70 V20"/>
+        </g>
+        <rect x="8" y="198" width="18" height="24" rx="3" fill="var(--muted)"/>
+        <text x="8" y="244" font-size="12" fill="var(--muted)">Quelle</text>
+        <!-- beam splitters -->
+        <g stroke="var(--ink)" stroke-width="3"><line x1="76" y1="224" x2="104" y2="196"/><line x1="286" y1="84" x2="314" y2="56"/></g>
+        <text x="58" y="250" font-size="12" fill="var(--ink)">Strahlteiler 1</text>
+        <text x="292" y="100" font-size="12" text-anchor="end" fill="var(--ink)">Strahlteiler 2</text>
+        <!-- mirrors -->
+        <g stroke="var(--muted)" stroke-width="5"><line x1="78" y1="58" x2="102" y2="82"/><line x1="288" y1="198" x2="312" y2="222"/></g>
+        <text x="40" y="52" font-size="12" fill="var(--muted)">Spiegel</text>
+        <text x="270" y="244" font-size="12" fill="var(--muted)">Spiegel</text>
+        <!-- phase shifter -->
+        <rect x="180" y="58" width="34" height="24" rx="4" fill="var(--warm-soft)" stroke="var(--c2)" stroke-width="2"/>
+        <text id="mzphi" x="197" y="75" font-size="13" text-anchor="middle" fill="var(--c2)" font-weight="700">φ</text>
+        <text x="160" y="50" font-size="12" fill="var(--c2)">Phasenschieber</text>
+        <!-- detectors -->
+        <circle id="g1" cx="385" cy="70" r="34" fill="url(#glow)" opacity="0"/>
+        <circle id="g2" cx="300" cy="14" r="34" fill="url(#glow)" opacity="0"/>
+        <rect x="370" y="56" width="22" height="28" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <rect x="286" y="2" width="28" height="20" rx="4" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+        <text x="381" y="104" font-size="13" text-anchor="middle" font-weight="700" fill="var(--ink)">D₁</text>
+        <text x="330" y="17" font-size="13" font-weight="700" fill="var(--ink)">D₂</text>
+        <text id="cnt1" x="381" y="122" font-size="12" text-anchor="middle" fill="var(--muted)"></text>
+        <text id="cnt2" x="350" y="34" font-size="12" fill="var(--muted)"></text>
+        <circle id="photon" r="5" fill="#ffb300" opacity="0"/>
+      </svg>
+      <svg id="ph" viewBox="-130 -130 260 260" role="img" aria-label="Zeigerdiagramm der Amplituden">
+        <line x1="-120" y1="0" x2="120" y2="0" stroke="var(--line)"/>
+        <line x1="0" y1="-120" x2="0" y2="120" stroke="var(--line)"/>
+        <circle r="100" fill="none" stroke="var(--line)" stroke-dasharray="3 4"/>
+        <text x="112" y="-6" font-size="11" fill="var(--muted)">Re</text>
+        <text x="6" y="-112" font-size="11" fill="var(--muted)">Im</text>
+        <g id="arrows"></g>
+        <text x="-124" y="122" font-size="11" fill="var(--c1)">━ zu D₁</text>
+        <text x="20" y="122" font-size="11" fill="var(--c2)">━ zu D₂</text>
+      </svg>
+    </div>
+    <div class="controls">
+      <label>Phase φ = <span id="phival" class="num">0</span>
+        <input id="phi" type="range" min="0" max="2" step="0.01" value="0.35"></label>
+      <button id="fire">100 Photonen schicken</button>
+      <button id="reset" class="ghost">Zähler zurücksetzen</button>
+    </div>
+    <figcaption>Links das Experiment, rechts die Amplituden als Pfeile in der komplexen Ebene (Kreis: Radius 1). Jede Amplitude ist die Summe zweier Pfeile der Länge ½, einer pro Weg. Die Länge des Summenpfeils entscheidet, wie hell der Detektor leuchtet. Ändere φ und schick Photonen los: Jedes einzelne Photon landet zufällig, erst die Statistik zeigt das Muster.</figcaption>
+  </figure>
+
+  <ol class="parts">
+    <li>Zeige $|e^{i\varphi}|=1$ und $\overline{e^{i\varphi}}=e^{-i\varphi}$ für $\varphi\in\mathbb{R}$. <span class="pts">1 Punkt</span></li>
+    <li>Berechne $P_1(\varphi)$ und $P_2(\varphi)$ und zeige $P_1+P_2=1$. <span class="pts">2 Punkte</span></li>
+    <li>Für welche $\varphi$ klickt $D_2$ nie? Was ist $P_1$ für $\varphi=\pi/2$ und für $\varphi=\pi$? <span class="pts">1 Punkt</span></li>
+    <li>Wären die Wege klassisch (das Photon nimmt mit Wahrscheinlichkeit ½ den einen oder den anderen Weg, und Wahrscheinlichkeiten werden addiert), dann wäre $P_1=|\tfrac12|^2+|\tfrac12 e^{i\varphi}|^2$. Berechne diesen Wert und erkläre in höchstens zwei Sätzen, welcher Term in deinem Ergebnis aus (b) den Unterschied macht. <span class="pts">1 Punkt</span></li>
+  </ol>
+  <details class="noprint"><summary>Tipp, falls du bei (b) feststeckst</summary>
+  Schreib $|a_1|^2=a_1\,\overline{a_1}$ und multipliziere aus. Benutze (a) und die Eulersche Formel $e^{i\varphi}=\cos\varphi+i\sin\varphi$.</details>
+</article>
+
+<!-- =========================== Aufgabe 2 ============================ -->
+<article class="card">
+  <h2>Aufgabe 2: Basiswechsel in $\mathbb{C}^2$ <span class="chip">5 Punkte</span></h2>
+
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Mit Kets und Skalarprodukten in $\mathbb{C}^2$ rechnen. Verstehen, dass derselbe Vektor in verschiedenen Basen verschiedene Koeffizienten hat, seine Länge aber gleich bleibt.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  Den Trick „Koeffizient = Skalarprodukt mit dem Basisvektor“, $c_j=\langle e_j|\Psi\rangle$. Er ist der Kern fast jeder Rechnung in der Quantenmechanik: Messwahrscheinlichkeiten, Zeitentwicklung, Fourier-Transformation sind alle dieser eine Trick in verschiedenen Kostümen.</div>
+
+  <p>In $\mathbb{C}^2$ seien $|0\rangle=\binom10$, $|1\rangle=\binom01$ (im Skript $|e_0\rangle$, $|e_1\rangle$, $|e_\pm\rangle$) und</p>
+  $$|+\rangle=\tfrac{1}{\sqrt2}\big(|0\rangle+|1\rangle\big),\qquad |-\rangle=\tfrac{1}{\sqrt2}\big(|0\rangle-|1\rangle\big).$$
+  <p>Das Skalarprodukt ist $\langle v|w\rangle=\sum_j \overline{v_j}\,w_j$.</p>
+
+  <figure>
+    <svg id="bw" viewBox="-160 -160 320 320" style="max-width:380px;margin:0 auto" role="img" aria-label="Zwei Basen der Ebene">
+      <g stroke="var(--line)"><line x1="-150" y1="0" x2="150" y2="0"/><line x1="0" y1="-150" x2="0" y2="150"/></g>
+      <g stroke="var(--c2)" stroke-dasharray="5 5" opacity=".6"><line x1="-110" y1="110" x2="110" y2="-110"/><line x1="-110" y1="-110" x2="110" y2="110"/></g>
+      <circle r="120" fill="none" stroke="var(--line)" stroke-dasharray="2 4"/>
+      <g id="proj"></g>
+      <line id="vec" x1="0" y1="0" x2="120" y2="0" stroke="var(--ink)" stroke-width="3" marker-end="url(#ah2)"/>
+      <circle id="handle" cx="120" cy="0" r="10" fill="var(--accent)" opacity=".35" style="cursor:grab"/>
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="var(--ink)"/></marker></defs>
+      <text x="140" y="-6" font-size="13" fill="var(--c1)">|0⟩</text>
+      <text x="6" y="-140" font-size="13" fill="var(--c1)">|1⟩</text>
+      <text x="100" y="-108" font-size="13" fill="var(--c2)">|+⟩</text>
+      <text x="100" y="124" font-size="13" fill="var(--c2)">|−⟩</text>
+    </svg>
+    <div class="controls" style="justify-content:center">
+      <span class="num" id="bwnum"></span>
+    </div>
+    <figcaption>Zieh den Vektor. Blau: Koeffizienten in der Basis $\{|0\rangle,|1\rangle\}$; orange: in der Basis $\{|+\rangle,|-\rangle\}$, die um 45° gedreht ist. Die Summe der Quadrate ist in beiden Basen gleich. Achtung: Zeichnen kann man nur Vektoren mit <em>reellen</em> Koeffizienten. Der Vektor in (c) hat komplexe Koeffizienten, dort hilft nur Rechnen.</figcaption>
+  </figure>
+
+  <ol class="parts">
+    <li>Zeige, dass $\{|+\rangle,|-\rangle\}$ eine Orthonormalbasis ist. <span class="pts">1 Punkt</span></li>
+    <li>Ein beliebiger Vektor ist $|\Psi\rangle=\psi_0|0\rangle+\psi_1|1\rangle$ mit $\psi_0,\psi_1\in\mathbb{C}$. Bestimme $c_\pm$ in $|\Psi\rangle=c_+|+\rangle+c_-|-\rangle$. <span class="pts">2 Punkte</span></li>
+    <li>Berechne $c_\pm$ für $|\Psi\rangle=\frac{1}{\sqrt3}\big(|0\rangle+(1+i)|1\rangle\big)$. <span class="pts">1 Punkt</span></li>
+    <li>Prüfe für den Vektor aus (c), dass $|\psi_0|^2+|\psi_1|^2=|c_+|^2+|c_-|^2=1$. <span class="pts">1 Punkt</span></li>
+  </ol>
+  <details class="noprint"><summary>Tipp, falls du bei (b) feststeckst</summary>
+  Zwei Wege führen zum Ziel: Entweder bildest du das Skalarprodukt von $|\Psi\rangle$ mit $|+\rangle$ bzw. $|-\rangle$, oder du drückst $|0\rangle$ und $|1\rangle$ durch $|\pm\rangle$ aus und setzt ein.</details>
+</article>
+
+<section class="card">
+  <h2>Ausblick: Wofür brauchen wir das?</h2>
+  <div class="later"><span class="lbl">Beide Aufgaben sind dasselbe Experiment</span>
+  Ein Strahlteiler macht aus dem Zustand „Photon im unteren Weg“, $|0\rangle$, genau den Zustand $|+\rangle$ aus Aufgabe 2: eine gleichgewichtete Überlagerung beider Wege. Der zweite Strahlteiler ist ein Basiswechsel zurück. Die Amplituden $a_1$, $a_2$ aus Aufgabe 1 sind die Koeffizienten des Endzustands in der Basis $\{|0\rangle,|1\rangle\}$.</div>
+  <ul>
+    <li><b>Woche 4 und 5 (Messung):</b> Die Zahlen $|c_\pm|^2$ werden die Wahrscheinlichkeiten, bei einer Messung in der $\pm$-Basis „+“ oder „−“ zu finden. Dass ihre Summe 1 ist, ist dann keine Rechenübung mehr, sondern eine physikalische Notwendigkeit.</li>
+    <li><b>Hausübung 10 (Spin):</b> Der Spin eines Elektrons lebt ebenfalls in $\mathbb{C}^2$. $|+\rangle$ und $|-\rangle$ sind dort „Spin nach rechts“ und „Spin nach links“.</li>
+    <li><b>Über die Vorlesung hinaus:</b> In einem Quantencomputer heißt der Strahlteiler <em>Hadamard-Gatter</em>, und $\mathbb{C}^2$ ist der Raum eines Qubits. Gravitationswellen-Detektoren wie LIGO sind riesige Interferometer, die Phasenverschiebungen von einem Tausendstel eines Protonendurchmessers messen. Dahinter steckt dieselbe Formel $P_1=\frac{1+\cos\varphi}{2}$, die du gerade herleitest.</li>
+  </ul>
+</section>
+
+<footer>Theoretische Physik C · Leibniz Universität Hannover · WiSe 2026/27 · Hausübung 2</footer>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  if(window.renderMathInElement) renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});
+});
+
+/* ---------- Mach-Zehnder ---------- */
+(function(){
+  const s=document.getElementById("phi"), out=document.getElementById("phival");
+  const arrows=document.getElementById("arrows"), g1=document.getElementById("g1"), g2=document.getElementById("g2");
+  const c1=document.getElementById("cnt1"), c2=document.getElementById("cnt2"), ph=document.getElementById("photon");
+  let n1=0,n2=0, phi=0;
+  const R=100; // radius for amplitude 1
+  const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function arrow(x1,y1,x2,y2,col,w,dash){
+    const a=Math.atan2(y2-y1,x2-x1), L=Math.hypot(x2-x1,y2-y1), h=Math.min(9,L*.5);
+    let d=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${w}" ${dash?'stroke-dasharray="4 3"':''}/>`;
+    if(L>2) d+=`<path d="M${x2},${y2} L${x2-h*Math.cos(a-0.4)},${y2-h*Math.sin(a-0.4)} L${x2-h*Math.cos(a+0.4)},${y2-h*Math.sin(a+0.4)} z" fill="${col}"/>`;
+    return d;
+  }
+  function fmt(v){ // phi in units of pi
+    const f=[[0,"0"],[0.25,"π/4"],[0.5,"π/2"],[0.75,"3π/4"],[1,"π"],[1.25,"5π/4"],[1.5,"3π/2"],[1.75,"7π/4"],[2,"2π"]];
+    for(const [x,t] of f) if(Math.abs(v-x)<0.005) return t;
+    return v.toFixed(2)+" π";
+  }
+  function draw(){
+    phi=parseFloat(s.value)*Math.PI; out.textContent=fmt(parseFloat(s.value));
+    const h=R/2, ex=h*Math.cos(phi), ey=-h*Math.sin(phi);
+    const C1=css("--c1"), C2=css("--c2");
+    let g="";
+    // D1: 1/2 then +1/2 e^{i phi}
+    g+=arrow(0,0,h,0,C1,1.5,true)+arrow(h,0,h+ex,ey,C1,1.5,true)+arrow(0,0,h+ex,ey,C1,3.5);
+    // D2: 1/2 then -1/2 e^{i phi}
+    g+=arrow(0,0,h,0,C2,1.5,true)+arrow(h,0,h-ex,-ey,C2,1.5,true)+arrow(0,0,h-ex,-ey,C2,3.5);
+    arrows.innerHTML=g;
+    const P1=(1+Math.cos(phi))/2;
+    g1.setAttribute("opacity",P1.toFixed(3)); g2.setAttribute("opacity",(1-P1).toFixed(3));
+  }
+  function counts(){ c1.textContent=n1+n2?`${n1} Klicks`:""; c2.textContent=n1+n2?`${n2} Klicks`:""; }
+  s.addEventListener("input",draw);
+  document.getElementById("reset").onclick=()=>{n1=0;n2=0;counts();};
+  let busy=false;
+  document.getElementById("fire").onclick=()=>{
+    if(busy) return; busy=true; let k=0;
+    const P1=(1+Math.cos(phi))/2;
+    const step=()=>{
+      if(k>=100){busy=false;ph.setAttribute("opacity",0);return;}
+      const hit1=Math.random()<P1; if(hit1) n1++; else n2++; counts();
+      ph.setAttribute("cx",hit1?380:300); ph.setAttribute("cy",hit1?70:12); ph.setAttribute("opacity",1);
+      k++; setTimeout(step,25);
+    };
+    step();
+  };
+  draw();
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+})();
+
+/* ---------- Basiswechsel ---------- */
+(function(){
+  const svg=document.getElementById("bw"), vec=document.getElementById("vec"), hd=document.getElementById("handle");
+  const proj=document.getElementById("proj"), num=document.getElementById("bwnum");
+  const R=120; let th=Math.PI/6, drag=false;
+  const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  function draw(){
+    const x=R*Math.cos(th), y=-R*Math.sin(th);
+    vec.setAttribute("x2",x); vec.setAttribute("y2",y); hd.setAttribute("cx",x); hd.setAttribute("cy",y);
+    const p0=Math.cos(th), p1=Math.sin(th), cp=(p0+p1)/Math.SQRT2, cm=(p0-p1)/Math.SQRT2;
+    const C1=css("--c1"), C2=css("--c2");
+    // projections: onto |0>,|1> and onto |+>=(1,1)/r2, |->=(1,-1)/r2 (screen y flipped)
+    const px=R*cp/Math.SQRT2, py=-R*cp/Math.SQRT2, mx=R*cm/Math.SQRT2, my=R*cm/Math.SQRT2;
+    proj.innerHTML=
+      `<line x1="${x}" y1="${y}" x2="${x}" y2="0" stroke="${C1}" stroke-dasharray="3 3"/>`+
+      `<line x1="${x}" y1="${y}" x2="0" y2="${y}" stroke="${C1}" stroke-dasharray="3 3"/>`+
+      `<line x1="0" y1="0" x2="${x}" y2="0" stroke="${C1}" stroke-width="5" opacity=".55"/>`+
+      `<line x1="0" y1="0" x2="0" y2="${y}" stroke="${C1}" stroke-width="5" opacity=".55"/>`+
+      `<line x1="${x}" y1="${y}" x2="${px}" y2="${py}" stroke="${C2}" stroke-dasharray="3 3"/>`+
+      `<line x1="${x}" y1="${y}" x2="${mx}" y2="${my}" stroke="${C2}" stroke-dasharray="3 3"/>`+
+      `<line x1="0" y1="0" x2="${px}" y2="${py}" stroke="${C2}" stroke-width="5" opacity=".55"/>`+
+      `<line x1="0" y1="0" x2="${mx}" y2="${my}" stroke="${C2}" stroke-width="5" opacity=".55"/>`;
+    const f=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(2);
+    num.innerHTML=`<span style="color:${C1}">ψ₀=${f(p0)}, ψ₁=${f(p1)}</span> &nbsp;·&nbsp; <span style="color:${C2}">c₊=${f(cp)}, c₋=${f(cm)}</span> &nbsp;·&nbsp; Summe der Quadrate: ${(p0*p0+p1*p1).toFixed(2)} = ${(cp*cp+cm*cm).toFixed(2)}`;
+  }
+  function pt(e){ const r=svg.getBoundingClientRect(); const t=e.touches?e.touches[0]:e;
+    return {x:(t.clientX-r.left)/r.width*320-160, y:(t.clientY-r.top)/r.height*320-160}; }
+  function mv(e){ if(!drag) return; const p=pt(e); th=Math.atan2(-p.y,p.x); draw(); e.preventDefault(); }
+  hd.addEventListener("mousedown",()=>drag=true); hd.addEventListener("touchstart",()=>drag=true,{passive:true});
+  svg.addEventListener("mousedown",e=>{drag=true;mv(e);});
+  window.addEventListener("mousemove",mv); window.addEventListener("touchmove",mv,{passive:false});
+  window.addEventListener("mouseup",()=>drag=false); window.addEventListener("touchend",()=>drag=false);
+  draw();
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+})();
+</script>
+</body>
+</html>
