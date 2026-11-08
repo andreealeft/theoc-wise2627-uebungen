@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheoC Hausübung 3</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f7f6f2; --paper:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#d9dce3;
+  --accent:#1f5fa8; --accent-soft:#e7effa; --goal:#2f6f4f; --goal-soft:#e8f3ec;
+  --warm:#b4561f; --warm-soft:#fbefe6; --c1:#1f5fa8; --c2:#c2410c; --c3:#2f6f4f;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; } }
+:root[data-theme="dark"]{
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,"Times New Roman",serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+.kicker{font:600 13px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;line-height:1.15;margin:6px 0 8px}
+h2{font-size:24px;margin:0 0 6px}
+h3{font:600 15px/1.4 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:22px 0 8px}
+.meta{font:15px/1.5 system-ui,sans-serif;color:var(--muted)}
+.meta b{color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px 22px 18px;margin:22px 0}
+.chip{display:inline-block;font:600 13px/1 system-ui,sans-serif;padding:6px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);vertical-align:middle;margin-left:8px}
+.goal{background:var(--goal-soft);border-left:4px solid var(--goal);padding:10px 14px;border-radius:6px;margin:12px 0}
+.goal .lbl,.train .lbl,.later .lbl{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:2px}
+.goal .lbl{color:var(--goal)}
+.train{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 14px;border-radius:6px;margin:12px 0}
+.train .lbl{color:var(--accent)}
+.later{background:var(--warm-soft);border-left:4px solid var(--warm);padding:10px 14px;border-radius:6px;margin:12px 0}
+.later .lbl{color:var(--warm)}
+ol.parts{padding-left:0;list-style:none;counter-reset:p}
+ol.parts>li{counter-increment:p;position:relative;padding-left:36px;margin:12px 0}
+ol.parts>li::before{content:"(" counter(p,lower-alpha) ")";position:absolute;left:0;font-weight:700}
+.pts{font:600 13px/1 system-ui,sans-serif;color:var(--muted);white-space:nowrap}
+figure{margin:18px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px}
+figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;font:14px/1.4 system-ui,sans-serif;margin-top:10px}
+.controls input[type=range]{width:220px;max-width:100%}
+button{font:600 14px/1 system-ui,sans-serif;padding:9px 14px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+.viz{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:center}
+@media (max-width:640px){.viz{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:system-ui,sans-serif}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:14px 0;font:15px/1.55 system-ui,sans-serif}
+summary{cursor:pointer;font-weight:600}
+.road{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:10px 0 4px}
+.road div{font:11px/1.25 system-ui,sans-serif;text-align:center;padding:8px 2px;border-radius:5px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.road div b{display:block;font-size:13px;color:var(--ink)}
+.road div.now{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.road div.now b{color:var(--paper)}
+@media (max-width:640px){.road{grid-template-columns:repeat(6,1fr)}}
+.num{font:600 14px/1.4 ui-monospace,Menlo,monospace}
+footer{font:13px/1.5 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);margin-top:36px;padding-top:12px}
+a.hl{white-space:nowrap;background:#ffe14d;color:#1d2330!important;border-radius:5px;padding:1px 6px;font-weight:600;text-decoration:none}
+a.pdfbtn{display:inline-block;background:#ffe14d;color:#1d2330;border:2px solid #e0b400;border-radius:8px;padding:8px 16px;font:700 15px/1.3 system-ui,sans-serif;text-decoration:none}
+.optional{border:2px dashed var(--line);border-radius:10px;padding:4px 16px 8px;margin:18px 0}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  .controls,button,.noprint,.pdfbtn{display:none!important}
+  .card{border:none;padding:0;margin:14px 0;break-inside:avoid-page}
+  details{border:none;padding:0} details:not([open]) > *:not(summary){display:block}
+  figure{break-inside:avoid}
+}
+
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.presets button{padding:7px 10px;font-size:13px}
+.mat{display:inline-grid;grid-template-columns:repeat(2,64px);gap:4px;vertical-align:middle;border-left:2px solid var(--ink);border-right:2px solid var(--ink);padding:2px 6px;border-radius:4px}
+.mat input{width:64px;font:14px ui-monospace,Menlo,monospace;padding:4px;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);text-align:center}
+.checks{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px;font:14px/1.35 system-ui,sans-serif}
+.checks div{border:1px solid var(--line);border-radius:6px;padding:8px 10px;background:var(--paper)}
+.checks b{display:block;font-size:13px;color:var(--muted)}
+.yes{color:var(--c3);font-weight:700} .no{color:var(--c2);font-weight:700}
+@media (max-width:640px){.checks{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Theoretische Physik C · WiSe 2026/27</div>
+  <h1>Hausübung 3</h1>
+  <div class="meta"><b>Ausgabe: So 08.11.2026 · Abgabe: So 15.11.2026, 18:00 Uhr</b> · 10 Punkte · 2 Aufgaben<br>
+  Prof. Dr. Tobias Osborne · Dr. Andreea-Iulia Lefterovici</div>
+</header>
+
+<section>
+  <h3>Worum es diese Woche geht</h3>
+  <p>In der Quantenmechanik ist alles, was man mit einem System <em>tun</em> kann, ein Operator: Messen, Filtern, Zeit vergehen lassen. Dabei tauchen immer wieder drei Sorten von Operatoren auf, und es lohnt sich, sie auf den ersten Blick zu erkennen.</p>
+  <ul>
+    <li><b>Hermitesch</b> ($A=A^\dagger$): Observablen, also messbare Größen. Ihre Eigenwerte sind reell.</li>
+    <li><b>Unitär</b> ($U^\dagger U=\mathbb{I}$): Zeitentwicklung und Basiswechsel. Sie erhalten Längen, also auch Wahrscheinlichkeiten.</li>
+    <li><b>Projektor</b> ($P^2=P=P^\dagger$): Filter und Ja/Nein-Detektoren. Zweimal filtern ist dasselbe wie einmal.</li>
+  </ul>
+  <p>In Aufgabe 1 prüfst du diese Eigenschaften an Matrizen. In Aufgabe 2 lernst du die Pauli-Matrizen kennen, die drei wichtigsten $2\times2$-Matrizen der Physik.</p>
+  <div class="road" aria-label="Themen des Semesters">
+    <div><b>1</b>Wahrschein&shy;lichkeit</div>
+    <div><b>2</b>Amplituden &amp; $\mathbb{C}^2$</div>
+    <div class="now"><b>3</b>Operatoren</div>
+    <div><b>4</b>Spur &amp; Diagona&shy;lisierung</div>
+    <div><b>5</b>Messung &amp; Zeit</div>
+    <div><b>6</b>Fourier</div>
+    <div><b>7</b>Wellen&shy;pakete</div>
+    <div><b>8</b>Kasten</div>
+    <div><b>9</b>Oszillator</div>
+    <div><b>10</b>Drehimpuls &amp; Spin</div>
+    <div><b>11</b>Wasserstoff</div>
+    <div><b>12</b>Identische Teilchen &amp; Entropie</div>
+  </div>
+  <div class="meta">Hausübungen des Semesters. Du bist bei Nummer 3.</div>
+</section>
+
+
+<!-- =========================== Aufgabe 1 ============================ -->
+<article class="card">
+  <h2>Aufgabe 1: Unitär, hermitesch oder Projektor? <span class="chip">5 Punkte</span></h2>
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Die Definitionen aus der Vorlesung an konkreten Matrizen prüfen, auch mit komplexen Einträgen: hermitesch heißt $A=A^\dagger$, unitär heißt $A^\dagger A=AA^\dagger=\mathbb{I}$, Projektor heißt $A^2=A=A^\dagger$.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  Das Adjungieren (transponieren <em>und</em> konjugieren) und Matrixmultiplikation ohne Fehler. Das klingt banal, ist aber die Grundlage für jede Rechnung mit Operatoren in den nächsten Wochen.</div>
+
+  <p>Entscheide für jede der folgenden Matrizen, ob sie unitär, hermitesch und/oder ein Projektor ist. Begründe jede Antwort mit einer Rechnung.</p>
+  $$A=\begin{pmatrix}2&1&0\\1&\frac12&0\\0&0&1\end{pmatrix},\qquad
+  B=\frac13\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&2\end{pmatrix},\qquad
+  C=\frac12\begin{pmatrix}1+i&1-i&0\\1-i&1+i&0\\0&0&2\end{pmatrix}.$$
+  <p class="pts">A: 1,5 Punkte · B: 2 Punkte · C: 1,5 Punkte</p>
+
+  <figure>
+    <div class="viz">
+      <svg id="lab" viewBox="-160 -160 320 320" role="img" aria-label="Wirkung einer 2x2-Matrix auf den Einheitskreis">
+        <g id="labg"></g>
+      </svg>
+      <div>
+        <div class="presets" id="presets"></div>
+        <div style="font:14px system-ui,sans-serif;margin-top:6px">Matrix $M$ =
+          <span class="mat"><input id="m00"><input id="m01"><input id="m10"><input id="m11"></span></div>
+      </div>
+    </div>
+    <div class="checks">
+      <div><b>Längen bleiben gleich (unitär)?</b><span id="ck1"></span></div>
+      <div><b>Symmetrisch (hermitesch)?</b><span id="ck2"></span></div>
+      <div><b>$M^2=M$ und symmetrisch (Projektor)?</b><span id="ck3"></span></div>
+    </div>
+    <figcaption>Matrix-Labor für reelle $2\times2$-Matrizen. Grau: der Einheitskreis mit zwei Basisvektoren; farbig: sein Bild unter $M$. Probier die Beispiele aus oder tippe eigene Einträge ein. Eine unitäre Matrix lässt den Kreis rund (sie dreht oder spiegelt nur). Ein Projektor drückt alles auf eine Gerade, und ein zweites Anwenden ändert nichts mehr. Die Matrizen der Aufgabe sind $3\times3$ und komplex, die musst du selbst rechnen.</figcaption>
+  </figure>
+</article>
+
+<!-- =========================== Aufgabe 2 ============================ -->
+<article class="card">
+  <h2>Aufgabe 2: Projektoren und Pauli-Matrizen <span class="chip">5 Punkte</span></h2>
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Sicher mit den Pauli-Matrizen rechnen. Verstehen, dass jeder normierte Zustand $|\psi\rangle$ einen Projektor $|\psi\rangle\langle\psi|$ definiert, und diesen für ein Qubit durch Pauli-Matrizen ausdrücken.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  Rechnen mit Bra-Ket-Ausdrücken wie $|\psi\rangle\langle\psi|\psi\rangle\langle\psi|$, ohne in Komponenten zu gehen. Diese Art zu rechnen ist kürzer und sicherer, und sie funktioniert auch dann noch, wenn die Vektoren unendlich viele Komponenten haben.</div>
+
+  <p>Die Pauli-Matrizen sind</p>
+  $$\sigma_x=\begin{pmatrix}0&1\\1&0\end{pmatrix},\qquad \sigma_y=\begin{pmatrix}0&-i\\ i&0\end{pmatrix},\qquad \sigma_z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.$$
+  <ol class="parts">
+    <li>Zeige $\sigma_x^2=\sigma_y^2=\sigma_z^2=\mathbb{I}$ und $\sigma_x\sigma_y=i\sigma_z$. Was ist $\sigma_y\sigma_x$? <span class="pts">1,5 Punkte</span></li>
+    <li>Sei $|\psi\rangle$ ein beliebiger normierter Vektor und $P=|\psi\rangle\langle\psi|$. Zeige $P^2=P$ und $P^\dagger=P$. <span class="pts">1 Punkt</span></li>
+    <li>Sei $|\psi\rangle=\frac1{\sqrt5}\big(2|0\rangle+i|1\rangle\big)$. Berechne $P=|\psi\rangle\langle\psi|$ als Matrix und bestimme reelle Zahlen $a$, $b$ mit $P=\frac12(\mathbb{I}+a\,\sigma_y+b\,\sigma_z)$. <span class="pts">1,5 Punkte</span></li>
+    <li>Berechne für diesen Zustand $\langle\psi|\sigma_y|\psi\rangle$ und $\langle\psi|\sigma_z|\psi\rangle$. Was fällt dir im Vergleich mit (c) auf? <span class="pts">1 Punkt</span></li>
+  </ol>
+  <details class="noprint"><summary>Tipp, falls du bei (b) feststeckst</summary>
+  Schreib $P^2=|\psi\rangle\langle\psi|\,|\psi\rangle\langle\psi|$ und schau, welcher Ausdruck in der Mitte steht. Für $P^\dagger$ hilft die Regel $(AB)^\dagger=B^\dagger A^\dagger$ und $(|\psi\rangle)^\dagger=\langle\psi|$.</details>
+</article>
+
+<section class="card">
+  <h2>Ausblick: Wofür brauchen wir das?</h2>
+  <div class="later"><span class="lbl">Ein Projektor ist ein Detektor</span>
+  In Postulat 3 der Vorlesung wird ein Detektor mit den Antworten „ja“ und „nein“ durch einen Operator $F$ beschrieben. Der wichtigste Fall ist ein Projektor $F=|\psi\rangle\langle\psi|$: ein Filter, der genau den Zustand $|\psi\rangle$ durchlässt. In Präsenzübung 4 baust du aus solchen Filtern ein Experiment mit Polarisatoren.</div>
+  <ul>
+    <li><b>Hausübung 5:</b> Unitäre Matrizen beschreiben die Zeitentwicklung, und dass sie Längen erhalten, heißt: Die Gesamtwahrscheinlichkeit bleibt 1.</li>
+    <li><b>Hausübung 10 (Spin):</b> Die Spin-Operatoren eines Elektrons sind $S_j=\frac\hbar2\sigma_j$. Die Relation $\sigma_x\sigma_y-\sigma_y\sigma_x=2i\sigma_z$ aus Aufgabe 2 wird dort zur Drehimpulsalgebra. Dass $\sigma_x$ und $\sigma_y$ nicht kommutieren, bedeutet physikalisch: Man kann den Spin nicht gleichzeitig in $x$- und $y$-Richtung kennen.</li>
+    <li><b>Über die Vorlesung hinaus:</b> In der Optik beschreibt man Polarisationsfilter mit genau solchen $2\times2$-Matrizen (Jones-Matrizen). Im Quantencomputer heißen $\sigma_x$, $\sigma_y$, $\sigma_z$ die X-, Y- und Z-Gatter.</li>
+  </ul>
+</section>
+
+<footer>Theoretische Physik C · Leibniz Universität Hannover · WiSe 2026/27 · Hausübung 3</footer>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  if(window.renderMathInElement) renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});
+});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* ---------- Matrix-Labor ---------- */
+(function(){
+  const R=60, c=Math.cos(Math.PI/6), s=Math.sin(Math.PI/6);
+  const P={"Drehung 30°":[[c,-s],[s,c]],"σx (Spiegelung)":[[0,1],[1,0]],"σz":[[1,0],[0,-1]],
+           "Projektor":[[.5,.5],[.5,.5]],"symmetrisch":[[1,2],[2,1]],"Scherung":[[1,1],[0,1]]};
+  const ids=["m00","m01","m10","m11"], inp=ids.map(i=>document.getElementById(i));
+  const box=document.getElementById("presets");
+  function setM(m){inp[0].value=+m[0][0].toFixed(3);inp[1].value=+m[0][1].toFixed(3);inp[2].value=+m[1][0].toFixed(3);inp[3].value=+m[1][1].toFixed(3);draw();}
+  for(const k in P){const b=document.createElement("button");b.className="ghost";b.textContent=k;b.onclick=()=>setM(P[k]);box.appendChild(b);}
+  inp.forEach(e=>e.addEventListener("input",draw));
+  function arrow(x,y,col,w){const a=Math.atan2(y,x),L=Math.hypot(x,y),h=Math.min(9,L*.5);
+    let d=`<line x1="0" y1="0" x2="${x}" y2="${y}" stroke="${col}" stroke-width="${w}"/>`;
+    if(L>3) d+=`<path d="M${x},${y}L${x-h*Math.cos(a-.4)},${y-h*Math.sin(a-.4)}L${x-h*Math.cos(a+.4)},${y-h*Math.sin(a+.4)}Z" fill="${col}"/>`; return d;}
+  function draw(){
+    const m=inp.map(e=>parseFloat(e.value)); if(m.some(isNaN)) return;
+    const [a,b,cc,d]=m, line=css('--line'), mut=css('--muted'), c1=css('--c1'), c2=css('--c2'), c3=css('--c3');
+    let g=`<line x1="-155" y1="0" x2="155" y2="0" stroke="${line}"/><line x1="0" y1="-155" x2="0" y2="155" stroke="${line}"/>`;
+    g+=`<circle r="${R}" fill="none" stroke="${mut}" stroke-dasharray="3 3"/>`;
+    let p="";for(let i=0;i<=120;i++){const t=i/120*2*Math.PI,x=Math.cos(t),y=Math.sin(t);p+=(i?"L":"M")+((a*x+b*y)*R).toFixed(1)+","+(-(cc*x+d*y)*R).toFixed(1);}
+    g+=`<path d="${p}" fill="${c1}" fill-opacity=".12" stroke="${c1}" stroke-width="2"/>`;
+    g+=arrow(R,0,mut,1.5)+arrow(0,-R,mut,1.5);
+    g+=arrow(a*R,-cc*R,c2,3)+arrow(b*R,-d*R,c3,3);
+    g+=`<text x="${a*R+6}" y="${-cc*R-6}" font-size="12" fill="${c2}">M e₁</text><text x="${b*R+6}" y="${-d*R-6}" font-size="12" fill="${c3}">M e₂</text>`;
+    document.getElementById("labg").innerHTML=g;
+    const eps=1e-6, mt=[[a*a+cc*cc,a*b+cc*d],[a*b+cc*d,b*b+d*d]];
+    const unit=Math.abs(mt[0][0]-1)<1e-3&&Math.abs(mt[1][1]-1)<1e-3&&Math.abs(mt[0][1])<1e-3;
+    const herm=Math.abs(b-cc)<1e-3;
+    const sq=[[a*a+b*cc,a*b+b*d],[cc*a+d*cc,cc*b+d*d]];
+    const proj=herm&&Math.abs(sq[0][0]-a)<1e-3&&Math.abs(sq[0][1]-b)<1e-3&&Math.abs(sq[1][0]-cc)<1e-3&&Math.abs(sq[1][1]-d)<1e-3;
+    const yn=v=>v?'<span class="yes">ja</span>':'<span class="no">nein</span>';
+    document.getElementById("ck1").innerHTML=yn(unit); document.getElementById("ck2").innerHTML=yn(herm); document.getElementById("ck3").innerHTML=yn(proj);
+  }
+  setM(P["Drehung 30°"]);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+})();
+</script>
+</body>
+</html>
