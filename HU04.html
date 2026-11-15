@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TheoC Hausübung 4</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --bg:#f7f6f2; --paper:#ffffff; --ink:#1d2330; --muted:#5b6475; --line:#d9dce3;
+  --accent:#1f5fa8; --accent-soft:#e7effa; --goal:#2f6f4f; --goal-soft:#e8f3ec;
+  --warm:#b4561f; --warm-soft:#fbefe6; --c1:#1f5fa8; --c2:#c2410c; --c3:#2f6f4f;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; } }
+:root[data-theme="dark"]{
+  --bg:#14171d; --paper:#1c2028; --ink:#e6e8ee; --muted:#a2a9b8; --line:#333a47;
+  --accent:#7fb0ef; --accent-soft:#1f2a3a; --goal:#7cc79e; --goal-soft:#1b2a22;
+  --warm:#f0a070; --warm-soft:#2e2219; --c1:#7fb0ef; --c2:#f59e6b; --c3:#7cc79e; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 Georgia,"Times New Roman",serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header.top{border-bottom:2px solid var(--ink);padding-bottom:14px;margin-bottom:22px}
+.kicker{font:600 13px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:34px;line-height:1.15;margin:6px 0 8px}
+h2{font-size:24px;margin:0 0 6px}
+h3{font:600 15px/1.4 system-ui,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:22px 0 8px}
+.meta{font:15px/1.5 system-ui,sans-serif;color:var(--muted)}
+.meta b{color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:22px 22px 18px;margin:22px 0}
+.chip{display:inline-block;font:600 13px/1 system-ui,sans-serif;padding:6px 10px;border-radius:99px;background:var(--accent-soft);color:var(--accent);vertical-align:middle;margin-left:8px}
+.goal{background:var(--goal-soft);border-left:4px solid var(--goal);padding:10px 14px;border-radius:6px;margin:12px 0}
+.goal .lbl,.train .lbl,.later .lbl{font:700 12px/1.4 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:2px}
+.goal .lbl{color:var(--goal)}
+.train{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 14px;border-radius:6px;margin:12px 0}
+.train .lbl{color:var(--accent)}
+.later{background:var(--warm-soft);border-left:4px solid var(--warm);padding:10px 14px;border-radius:6px;margin:12px 0}
+.later .lbl{color:var(--warm)}
+ol.parts{padding-left:0;list-style:none;counter-reset:p}
+ol.parts>li{counter-increment:p;position:relative;padding-left:36px;margin:12px 0}
+ol.parts>li::before{content:"(" counter(p,lower-alpha) ")";position:absolute;left:0;font-weight:700}
+.pts{font:600 13px/1 system-ui,sans-serif;color:var(--muted);white-space:nowrap}
+figure{margin:18px 0;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:14px}
+figcaption{font:14px/1.5 system-ui,sans-serif;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;font:14px/1.4 system-ui,sans-serif;margin-top:10px}
+.controls input[type=range]{width:220px;max-width:100%}
+button{font:600 14px/1 system-ui,sans-serif;padding:9px 14px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:var(--paper);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+.viz{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;align-items:center}
+@media (max-width:640px){.viz{grid-template-columns:1fr}}
+svg{width:100%;height:auto;display:block}
+svg text{font-family:system-ui,sans-serif}
+details{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:14px 0;font:15px/1.55 system-ui,sans-serif}
+summary{cursor:pointer;font-weight:600}
+.road{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin:10px 0 4px}
+.road div{font:11px/1.25 system-ui,sans-serif;text-align:center;padding:8px 2px;border-radius:5px;background:var(--paper);border:1px solid var(--line);color:var(--muted)}
+.road div b{display:block;font-size:13px;color:var(--ink)}
+.road div.now{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.road div.now b{color:var(--paper)}
+@media (max-width:640px){.road{grid-template-columns:repeat(6,1fr)}}
+.num{font:600 14px/1.4 ui-monospace,Menlo,monospace}
+footer{font:13px/1.5 system-ui,sans-serif;color:var(--muted);border-top:1px solid var(--line);margin-top:36px;padding-top:12px}
+a.hl{white-space:nowrap;background:#ffe14d;color:#1d2330!important;border-radius:5px;padding:1px 6px;font-weight:600;text-decoration:none}
+a.pdfbtn{display:inline-block;background:#ffe14d;color:#1d2330;border:2px solid #e0b400;border-radius:8px;padding:8px 16px;font:700 15px/1.3 system-ui,sans-serif;text-decoration:none}
+.optional{border:2px dashed var(--line);border-radius:10px;padding:4px 16px 8px;margin:18px 0}
+@media print{
+  body{background:#fff;color:#000;font-size:12pt}
+  .controls,button,.noprint,.pdfbtn{display:none!important}
+  .card{border:none;padding:0;margin:14px 0;break-inside:avoid-page}
+  details{border:none;padding:0} details:not([open]) > *:not(summary){display:block}
+  figure{break-inside:avoid}
+}
+
+.mbox{font:15px/1.5 ui-monospace,Menlo,monospace;text-align:center;margin-top:6px}
+.mtab{display:inline-grid;grid-template-columns:repeat(2,78px);gap:2px 8px;border-left:2px solid var(--ink);border-right:2px solid var(--ink);padding:4px 8px;border-radius:4px;vertical-align:middle}
+.mtab span{text-align:center}
+.mtab .d{color:var(--c2);font-weight:700}
+.big{font:600 15px/1.5 system-ui,sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Theoretische Physik C · WiSe 2026/27</div>
+  <h1>Hausübung 4</h1>
+  <div class="meta"><b>Ausgabe: So 15.11.2026 · Abgabe: So 22.11.2026, 18:00 Uhr</b> · 10 Punkte · 2 Aufgaben<br>
+  Prof. Dr. Tobias Osborne · Dr. Andreea-Iulia Lefterovici</div>
+</header>
+
+<section>
+  <h3>Worum es diese Woche geht</h3>
+  <p>Eine physikalische Aussage darf nicht davon abhängen, welche Basis man zum Rechnen gewählt hat. Die Matrixeinträge eines Operators ändern sich beim Basiswechsel, aber manche Zahlen bleiben gleich, zum Beispiel die Eigenwerte und die <em>Spur</em>. Deshalb taucht die Spur in den Postulaten auf: Die Wahrscheinlichkeit $\mathrm{tr}(\rho F)$ ist in jeder Basis dieselbe.</p>
+  <p>Die zweite Frage dieser Woche: Wann kann man zwei Größen gleichzeitig scharf kennen? Die Antwort ist „wenn ihre Operatoren kommutieren“, und Aufgabe 2 zeigt, worauf man dabei achten muss.</p>
+  <div class="road" aria-label="Themen des Semesters">
+    <div><b>1</b>Wahrschein&shy;lichkeit</div>
+    <div><b>2</b>Amplituden &amp; $\mathbb{C}^2$</div>
+    <div><b>3</b>Operatoren</div>
+    <div class="now"><b>4</b>Spur &amp; Diagona&shy;lisierung</div>
+    <div><b>5</b>Messung &amp; Zeit</div>
+    <div><b>6</b>Fourier</div>
+    <div><b>7</b>Wellen&shy;pakete</div>
+    <div><b>8</b>Kasten</div>
+    <div><b>9</b>Oszillator</div>
+    <div><b>10</b>Drehimpuls &amp; Spin</div>
+    <div><b>11</b>Wasserstoff</div>
+    <div><b>12</b>Identische Teilchen &amp; Entropie</div>
+  </div>
+  <div class="meta">Hausübungen des Semesters. Du bist bei Nummer 4.</div>
+</section>
+
+
+<!-- =========================== Aufgabe 1 ============================ -->
+<article class="card">
+  <h2>Aufgabe 1: Die Spur <span class="chip">5 Punkte</span></h2>
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Mit dem Einschieben der Eins $\mathbb{I}=\sum_x|x\rangle\langle x|$ rechnen. Verstehen, warum die Spur nicht von der Basis abhängt und warum $\mathrm{tr}(\rho F)$ aus Postulat 4 für eine Mischung reiner Zustände der gewichtete Mittelwert der einzelnen Wahrscheinlichkeiten ist.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  „Eine Eins einschieben“ ist der wichtigste Trick der Bra-Ket-Rechnung. Er steckt hinter jedem Basiswechsel, hinter der Fourier-Transformation (Vorlesung 8, Hausübung 6) und hinter fast jeder Herleitung im Skript. Kurze Beweise wie diese sind außerdem typische Klausuraufgaben.</div>
+
+  <p>Die Spur eines Operators $A$ auf $\mathbb C^n$ ist $\mathrm{tr}(A)=\sum_x\langle x|A|x\rangle$ für eine Orthonormalbasis $\{|x\rangle\}$.</p>
+  <ol class="parts">
+    <li>Zeige $\mathrm{tr}(AB)=\mathrm{tr}(BA)$ für zwei beliebige Operatoren $A$, $B$. <span class="pts">2 Punkte</span></li>
+    <li>Folgere: Für jede unitäre Matrix $S$ gilt $\mathrm{tr}(SAS^\dagger)=\mathrm{tr}(A)$. <span class="pts">1 Punkt</span></li>
+    <li>Folgere für hermitesches $A$: $\mathrm{tr}(A)$ ist die Summe der Eigenwerte. Prüfe das an $A=\begin{pmatrix}1&2\\2&1\end{pmatrix}$ aus der Präsenzübung 3. <span class="pts">1 Punkt</span></li>
+    <li>Zeige $\mathrm{tr}\big(|\psi\rangle\langle\phi|\big)=\langle\phi|\psi\rangle$. Folgere für $\rho=p\,|\psi_1\rangle\langle\psi_1|+(1-p)\,|\psi_2\rangle\langle\psi_2|$ mit $0\le p\le1$ und normierten $|\psi_1\rangle$, $|\psi_2\rangle$: $\mathrm{tr}(\rho F)=p\,\langle\psi_1|F|\psi_1\rangle+(1-p)\,\langle\psi_2|F|\psi_2\rangle$. (Den reinen Fall rechnet das Skript in Vorlesung 6 vor.) <span class="pts">1 Punkt</span></li>
+  </ol>
+
+  <figure>
+    <div class="viz">
+      <svg id="tr" viewBox="-150 -150 300 300" role="img" aria-label="Matrix in gedrehter Basis"><g id="trg"></g></svg>
+      <div>
+        <p class="big" style="margin:0 0 6px">$M=\begin{pmatrix}3&1\\1&1\end{pmatrix}$ in der gedrehten Basis $\{|e_1'\rangle,|e_2'\rangle\}$:</p>
+        <div class="mbox"><span class="mtab"><span class="d" id="t00"></span><span id="t01"></span><span id="t10"></span><span class="d" id="t11"></span></span></div>
+        <p class="big" id="trsum" style="margin-top:10px"></p>
+      </div>
+    </div>
+    <div class="controls"><label>Drehwinkel der Basis φ = <span class="num" id="phv"></span> <input id="phi" type="range" min="0" max="180" step="0.5" value="0"></label></div>
+    <figcaption>Dreh die Basis. Die Einträge $\langle e_i'|M|e_j'\rangle$ ändern sich alle, aber die Summe der Diagonaleinträge (orange) bleibt gleich. Bei einem bestimmten Winkel verschwinden die Nebendiagonalen: Dann zeigt die Basis entlang der Hauptachsen der Ellipse, und auf der Diagonale stehen die Eigenwerte.</figcaption>
+  </figure>
+</article>
+
+<!-- =========================== Aufgabe 2 ============================ -->
+<article class="card">
+  <h2>Aufgabe 2: Kommutierende Observablen mit Entartung <span class="chip">5 Punkte</span></h2>
+  <div class="goal"><span class="lbl">Lernziel</span>
+  Verstehen, dass kommutierende hermitesche Operatoren eine gemeinsame Eigenbasis haben, und dass man sie bei einem entarteten Eigenwert erst richtig wählen muss. Eine solche Basis konkret konstruieren.</div>
+  <div class="train"><span class="lbl">Was du trainierst, wenn du das selbst rechnest</span>
+  Eigenwertprobleme in drei Dimensionen und den Umgang mit Entartung. Beim Wasserstoffatom (Woche 11) haben viele Zustände dieselbe Energie, und man unterscheidet sie erst durch weitere kommutierende Observablen: die Quantenzahlen $n$, $l$, $m$.</div>
+
+  $$A=\begin{pmatrix}1&0&0\\0&0&1\\0&1&0\end{pmatrix},\qquad B=\begin{pmatrix}0&1&1\\1&0&0\\1&0&0\end{pmatrix}.$$
+  <ol class="parts">
+    <li>Zeige $[A,B]=AB-BA=0$. <span class="pts">1 Punkt</span></li>
+    <li>Berechne Eigenwerte und eine Orthonormalbasis aus Eigenvektoren von $A$. Welcher Eigenwert ist entartet? <span class="pts">1,5 Punkte</span></li>
+    <li>Der Vektor $|e_1\rangle=(1,0,0)^T$ ist ein Eigenvektor von $A$. Ist er auch ein Eigenvektor von $B$? <span class="pts">0,5 Punkte</span></li>
+    <li>Finde eine Orthonormalbasis aus <em>gemeinsamen</em> Eigenvektoren von $A$ und $B$ und gib zu jedem Vektor das Eigenwertpaar $(a,b)$ an. <span class="pts">2 Punkte</span></li>
+  </ol>
+
+  <figure>
+    <svg viewBox="0 0 640 230" role="img" aria-label="Entarteter Eigenraum als Ebene">
+      <polygon points="80,170 330,170 420,70 170,70" fill="var(--accent-soft)" stroke="var(--c1)" stroke-width="1.5"/>
+      <text x="80" y="195" font-size="13" fill="var(--c1)" font-family="system-ui">Eigenraum von A zum entarteten Eigenwert (eine Ebene)</text>
+      <g stroke="var(--ink)" stroke-width="2.5"><line x1="250" y1="120" x2="350" y2="120"/><line x1="250" y1="120" x2="290" y2="78"/></g>
+      <g stroke="var(--c2)" stroke-width="2.5" stroke-dasharray="6 4"><line x1="250" y1="120" x2="330" y2="85"/><line x1="250" y1="120" x2="300" y2="150"/></g>
+      <line x1="250" y1="120" x2="250" y2="20" stroke="var(--c3)" stroke-width="2.5"/>
+      <text x="258" y="28" font-size="13" fill="var(--c3)" font-family="system-ui">nicht entartet: eindeutig</text>
+      <text x="430" y="110" font-size="13" fill="var(--ink)" font-family="system-ui">eine Wahl (schwarz)</text>
+      <text x="430" y="130" font-size="13" fill="var(--c2)" font-family="system-ui">eine andere Wahl (orange)</text>
+    </svg>
+    <figcaption>Zu einem nicht entarteten Eigenwert gehört eine einzige Richtung. Zu einem entarteten gehört eine ganze Ebene, und jede Orthonormalbasis dieser Ebene besteht aus Eigenvektoren. Ein zweiter, kommutierender Operator $B$ wählt daraus eine bestimmte Basis aus. Welche, findest du in (d).</figcaption>
+  </figure>
+  <details class="noprint"><summary>Tipp, falls du bei (d) feststeckst</summary>
+  Berechne $B|e_1\rangle$ und $B|s\rangle$ für deinen zweiten Eigenvektor $|s\rangle$ zum entarteten Eigenwert. Beide Ergebnisse liegen wieder in der Ebene. Dort wirkt $B$ also wie eine $2\times2$-Matrix, und die kannst du diagonalisieren.</details>
+</article>
+
+<section class="card">
+  <h2>Ausblick: Wofür brauchen wir das?</h2>
+  <div class="later"><span class="lbl">Quantenzahlen sind Eigenwertpaare</span>
+  In Aufgabe 2 legt das Paar $(a,b)$ einen Zustand eindeutig fest, obwohl $a$ allein das nicht kann. Genau so funktionieren Quantenzahlen: Beim Wasserstoffatom haben alle Zustände mit derselben Hauptquantenzahl $n$ dieselbe Energie. Erst zusammen mit den Eigenwerten der kommutierenden Drehimpuls-Operatoren $L^2$ und $L_z$ wird der Zustand $|n,l,m\rangle$ eindeutig.</div>
+  <ul>
+    <li><b>Hausübung 5:</b> Dort rechnest du Erwartungswerte als $\mathrm{tr}(\rho A)$, auch für gemischte Zustände, bei denen es kein $|\psi\rangle$ mehr gibt.</li>
+    <li><b>Präsenzübung 5 (Unschärfe):</b> Was passiert, wenn zwei Operatoren <em>nicht</em> kommutieren? Dann gibt es keine gemeinsame Eigenbasis, und die Unschärferelation sagt, wie scharf man beide Größen höchstens gleichzeitig kennen kann.</li>
+    <li><b>Über die Vorlesung hinaus:</b> In der statistischen Physik (Vorlesung 22, kanonisches Ensemble) ist die Zustandssumme $Z=\mathrm{tr}\,e^{-H/kT}$ eine Spur, und dass sie in jeder Basis gleich ist, macht sie überhaupt erst berechenbar.</li>
+  </ul>
+</section>
+
+<footer>Theoretische Physik C · Leibniz Universität Hannover · WiSe 2026/27 · Hausübung 4</footer>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+  if(window.renderMathInElement) renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}]});
+});
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* ---------- Spur-Invarianz ---------- */
+(function(){
+  const M=[[3,1],[1,1]], R=36, ph=document.getElementById("phi");
+  function arrow(x,y,col,w,lab){const a=Math.atan2(y,x),h=9;
+    return `<line x1="0" y1="0" x2="${x}" y2="${y}" stroke="${col}" stroke-width="${w}"/><path d="M${x},${y}L${x-h*Math.cos(a-.4)},${y-h*Math.sin(a-.4)}L${x-h*Math.cos(a+.4)},${y-h*Math.sin(a+.4)}Z" fill="${col}"/>`+
+      (lab?`<text x="${x*1.15}" y="${y*1.15}" font-size="12" text-anchor="middle" fill="${col}">${lab}</text>`:"");}
+  function draw(){
+    const p=(+ph.value)*Math.PI/180, c=Math.cos(p), s=Math.sin(p);
+    document.getElementById("phv").textContent=(+ph.value).toFixed(1)+"°";
+    const e1=[c,s], e2=[-s,c];
+    const Mv=v=>[M[0][0]*v[0]+M[0][1]*v[1],M[1][0]*v[0]+M[1][1]*v[1]], dot=(u,v)=>u[0]*v[0]+u[1]*v[1];
+    const t=[[dot(e1,Mv(e1)),dot(e1,Mv(e2))],[dot(e2,Mv(e1)),dot(e2,Mv(e2))]];
+    const f=v=>(Math.abs(v)<5e-3?0:v).toFixed(2);
+    document.getElementById("t00").textContent=f(t[0][0]); document.getElementById("t01").textContent=f(t[0][1]);
+    document.getElementById("t10").textContent=f(t[1][0]); document.getElementById("t11").textContent=f(t[1][1]);
+    document.getElementById("trsum").innerHTML=`Diagonalsumme: ${f(t[0][0])} + ${f(t[1][1])} = <span style="color:${css('--c2')}">${(t[0][0]+t[1][1]).toFixed(2)}</span>`;
+    const ln=css('--line'), c1=css('--c1'), c2=css('--c2');
+    let g=`<line x1="-145" y1="0" x2="145" y2="0" stroke="${ln}"/><line x1="0" y1="-145" x2="0" y2="145" stroke="${ln}"/>`;
+    let d="";for(let i=0;i<=120;i++){const a=i/120*2*Math.PI,v=Mv([Math.cos(a),Math.sin(a)]);d+=(i?"L":"M")+(v[0]*R).toFixed(1)+","+(-v[1]*R).toFixed(1);}
+    g+=`<path d="${d}" fill="${c1}" fill-opacity=".1" stroke="${c1}" stroke-dasharray="4 3"/>`;
+    g+=arrow(e1[0]*100,-e1[1]*100,c2,3,"e₁′")+arrow(e2[0]*100,-e2[1]*100,c2,3,"e₂′");
+    document.getElementById("trg").innerHTML=g;
+  }
+  ph.addEventListener("input",draw); draw();
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",draw);
+})();
+</script>
+</body>
+</html>
